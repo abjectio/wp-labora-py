@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import MySQLdb
 import ConfigParser, os
 
