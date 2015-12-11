@@ -3,5 +3,6 @@ wp
 wp-cli.yml
 test.ics
 icalendar
+wordpress_xmlrpc
 *.pyc
 *.cfg
