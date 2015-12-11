@@ -6,7 +6,7 @@ import subprocess, shlex, array
 
 #Variabler
 gudstjenester_ics = "events.ics"
-medarb_ics_url = "https://wsu4.mylabora.com/churchhubrelease/icalhandler.ashx?iCal=8fa0ae2d-2380-400b-9960-a56500bfaf87"
+medarb_ics_url = "https://wsu4.mylabora.com/churchhubrelease/ missing the rest"
 wp_cmd = "./wp"
 
 #DELETE ALL POSTS/EVENTS
