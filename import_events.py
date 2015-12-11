@@ -13,6 +13,8 @@ import ConfigParser, os
 #CONFIGS
 section = "config"
 cfgfilename = "import_events.cfg"
+
+print "Read configs"
 parser = ConfigParser.ConfigParser();
 parser.readfp(open(cfgfilename))
 
@@ -24,6 +26,7 @@ wp_pwd = parser.get(section,'wp_pwd')
 
 
 #EXPORT ICS
+print "Get ICS file -> " + medarb_ics_url
 export_ics = check_output(["curl","--silent",medarb_ics_url])
 if export_ics:
 	f = open(gudstjenester_ics,'w')
@@ -32,9 +35,11 @@ if export_ics:
 
 
 #New WordPress object
+print "Get a WordPress instance"
 wp = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
 
 #Get all IDs of Posts of post_type 'event'
+print "Get all posts to delete"
 offset = 0
 increment = 10
 ids = []
@@ -48,11 +53,12 @@ while True:
 
 #Iterate and delete posts
 for delete_id in ids:
-	print "Deleteing id : " + delete_id
+	print "Deleteing id -> " + delete_id
 	wp.call(DeletePost(delete_id))
 
 
 #OPEN ICS FILE
+print "Read ICAL file"
 cal = Calendar.from_ical(open(gudstjenester_ics,'rb').read())
 for component in cal.walk('VEVENT'):	
 	summary = component.get('SUMMARY').encode('UTF-8','backslashreplace')
@@ -100,4 +106,5 @@ for component in cal.walk('VEVENT'):
 		new_post.custom_fields.append({'key':i[0], 'value':i[1]})
 				
 	#Add New Post and it's meta data
+	print "Create new post -> " + new_post.title
 	wp.call(NewPost(new_post))
