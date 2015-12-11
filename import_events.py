@@ -8,10 +8,20 @@ from wordpress_xmlrpc.methods.users import GetUserInfo
 from datetime import datetime
 from icalendar import Calendar, vDDDTypes, Event
 from subprocess import check_output
+import ConfigParser, os
 
-#Variabler
-gudstjenester_ics = "events.ics"
-medarb_ics_url = "https://wsu4.mylabora.com/churchhubrelease/icalhandler.ashx"
+#CONFIGS
+section = "config"
+cfgfilename = "import_events.cfg"
+parser = ConfigParser.ConfigParser();
+parser.readfp(open(cfgfilename))
+
+medarb_ics_url = parser.get(section,'ics_url')
+wp_url = parser.get(section,'wp_url')
+gudstjenester_ics = parser.get(section,'ics_filename')
+wp_user = parser.get(section,'wp_user')
+wp_pwd = parser.get(section,'wp_pwd')
+
 
 #EXPORT ICS
 export_ics = check_output(["curl","--silent",medarb_ics_url])
@@ -22,7 +32,7 @@ if export_ics:
 
 
 #New WordPress object
-wp = Client('http://localhost:8080/xmlrpc.php', 'admin', 'password')
+wp = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
 
 #Get all IDs of Posts of post_type 'event'
 offset = 0
