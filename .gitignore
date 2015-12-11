@@ -1,2 +1,6 @@
+wp
+wp-cli.yml
+test.ics
+icalendar
 *.pyc
 *.cfg
