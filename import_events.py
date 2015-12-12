@@ -2,6 +2,9 @@
 
 #https://python-wordpress-xmlrpc.readthedocs.org/
 #https://github.com/maxcutler/python-wordpress-xmlrpc.git
+#https://github.com/collective/icalendar
+#dependent on pytz
+#pip install pytz
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import GetPosts, NewPost, DeletePost
 from wordpress_xmlrpc.methods.users import GetUserInfo
@@ -9,10 +12,20 @@ from datetime import datetime
 from icalendar import Calendar, vDDDTypes, Event
 from subprocess import check_output
 import ConfigParser, os
+import sys
 
 #CONFIGS
 section = "config"
-cfgfilename = "import_events.cfg"
+
+#Get config file to read
+if len(sys.argv)<=1:
+	print "No config file"
+	sys.exit(2)
+
+cfgfilename = sys.argv[1]
+if not os.path.isfile(cfgfilename):
+	print "File not found: " + cfgfilename
+	sys.exit(2)
 
 print "Read configs"
 parser = ConfigParser.ConfigParser();
@@ -23,6 +36,7 @@ wp_url = parser.get(section,'wp_url')
 gudstjenester_ics = parser.get(section,'ics_filename')
 wp_user = parser.get(section,'wp_user')
 wp_pwd = parser.get(section,'wp_pwd')
+event_category = parser.get(section,'event_category')
 
 
 #EXPORT ICS
@@ -39,7 +53,7 @@ print "Get a WordPress instance"
 wp = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
 
 #Get all IDs of Posts of post_type 'event'
-print "Get all posts to delete"
+print "Get all posts with category-event " + event_category + " and delete those"
 offset = 0
 increment = 10
 ids = []
@@ -47,9 +61,11 @@ while True:
 	posts = wp.call(GetPosts({'post_type': 'event', 'number': increment, 'offset': offset}))
 	if len(posts) == 0:
 		break #no more posts
-	for one_post in posts:
-		ids.append(one_post.id)		
+	for one_post in posts:		
+		if (one_post.terms[0].name == event_category):
+			ids.append(one_post.id)
 	offset += increment
+
 
 #Iterate and delete posts
 for delete_id in ids:
@@ -73,7 +89,7 @@ for component in cal.walk('VEVENT'):
 	new_post.content = event_description
 	new_post.post_type = "event"
 	new_post.post_status = "publish"
-	new_post.terms_names = { 'event-category': ['Gudstjeneste'] }
+	new_post.terms_names = { 'event-category': [event_category] }
 	new_post.custom_fields = []
 	
 	meta_adds = (['imic_event_start_dt',start_event],
