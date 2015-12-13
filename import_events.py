@@ -1,11 +1,41 @@
 #!/usr/bin/python
+"""
+:mod:`import_events` -- Importing ical events into WordPress posts
+==================================================================
+
+.. module:: import_events
+   :platform: Unix, Windows
+   :synopsis: Importing ical events into WordPress posts.
+.. moduleauthor:: Eric Cleese <knut.erik@unlike.no>
+
+This file is part of import_events python code.
+
+import_events is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+import_events is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with import_events.  If not, see <http://www.gnu.org/licenses/>.
+
+----------------------------------------------------------------------
+
+import_events - is a script which imports ical events into WordPress posts.
+Dependent on - pytz, iCalendar and python-wordpress-xmlrpc
+
+<https://python-wordpress-xmlrpc.readthedocs.org/>
+<https://github.com/maxcutler/python-wordpress-xmlrpc.git/>
+<https://github.com/collective/icalendar/>
+pip install pytz
+
+"""
 #https://www.python.org/dev/peps/pep-0008/ - coding style
 #https://www.python.org/dev/peps/pep-0257/
-#https://python-wordpress-xmlrpc.readthedocs.org/
-#https://github.com/maxcutler/python-wordpress-xmlrpc.git
-#https://github.com/collective/icalendar
-#dependent on pytz
-#pip install pytz
 from wordpress_xmlrpc import Client, WordPressPost
 from wordpress_xmlrpc.methods.posts import GetPosts, NewPost, DeletePost
 from wordpress_xmlrpc.methods.users import GetUserInfo
@@ -39,16 +69,21 @@ def populate_configs():
 	return parser
 
 
-def export_ics_file(medarb_ics_url, gudstjenester_ics):
-	"""Read configurations from file"""
+def export_ics_file(ics_url, output_file):
+	"""Read configurations from file.
+	
+	:param ics_url: URL to ICS stream/ICal file
+	:param output_file: Name of file to write the ICal resluts	
+	:return: returns nothing
+	"""
 	
 	#EXPORT ICS
-	logging.info('Get ICS file: [' + medarb_ics_url + ']')
+	logging.info('Get ICS file: [' + ics_url + ']')
 	
 	try:
-		export_ics = check_output(["curl","--silent",medarb_ics_url])
+		export_ics = check_output(["curl","--silent",ics_url])
 		if export_ics:
-			f = open(gudstjenester_ics,'w')
+			f = open(output_file,'w')
 			f.write(export_ics)
 			f.close()
 	except Exception as e:
@@ -185,7 +220,6 @@ def create_all_posts_from_ical(client, ical, event_category, dry_run):
 
 def main():
 	"""main function"""
-
 	
 	#Logging
 	logging.basicConfig(filename='import_events.log', level=logging.INFO)
@@ -196,7 +230,7 @@ def main():
 	
 	#Config header name
 	section = "config"
-	medarb_ics_url = parser.get(section,'ics_url')
+	ics_url = parser.get(section,'ics_url')
 	wp_url = parser.get(section,'wp_url')
 	ics_filename = parser.get(section,'ics_filename')
 	wp_user = parser.get(section,'wp_user')
@@ -208,7 +242,7 @@ def main():
 		logging.info('It\'s a DRY run');
 	
 	#Export the ICS file
-	export_ics_file(medarb_ics_url, ics_filename)
+	export_ics_file(ics_url, ics_filename)
 	
 	#Initate WordPress Client
 	client = get_wordpress_client(wp_url, wp_user, wp_pwd)
