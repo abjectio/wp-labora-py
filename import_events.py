@@ -146,12 +146,12 @@ def createAllPostsFromICal(client, ical, event_category, dry_run):
 #Define main function
 def main():
 
+	#print logging.INFO #20
+	#print logging.DEBUG #10
+
 	#Logging
 	logging.basicConfig(filename='import_events.log', level=logging.INFO)
 	logging.info('[START IMPORT]')
-	
-	#
-	dry_run = 1
 	
 	#Populate the configs
 	parser = populateConfigs()
@@ -164,6 +164,10 @@ def main():
 	wp_user = parser.get(section,'wp_user')
 	wp_pwd = parser.get(section,'wp_pwd')
 	event_category = parser.get(section,'event_category')
+	dry_run = parser.get(section,'dry_run')
+
+	if dry_run:
+		logging.info('It\'s a DRY run');
 	
 	#Export the ICS file
 	exportICSFile(medarb_ics_url, ics_filename)
