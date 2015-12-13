@@ -73,10 +73,12 @@ def getAllIDs(client, event_category):
 
 def deleteWPPosts(client, ids, dry_run):
 	#Iterate and delete posts
-	for delete_id in ids:		
+	for delete_id in ids:
+		logging.info('Deleting WordpressPost with ID: [' + delete_id + ']')	
 		if not dry_run:
 			client.call(DeletePost(delete_id))
-			logging.info('Deleting WordpressPost with ID: [' + delete_id + ']')
+				
+	logging.info('Deleted %s WordPress posts',len(ids))
 
 def readICALFile(fileName):
 	#OPEN ICS FILE
@@ -139,8 +141,11 @@ def createNewWPPost(client, component, event_category, dry_run):
 
 #Create new WordPress posts from ICalendar object
 def createAllPostsFromICal(client, ical, event_category, dry_run):
+	i=0
 	for component in ical.walk('VEVENT'):
 		createNewWPPost(client, component, event_category, dry_run)
+		i += 1
+	logging.info('Created %s WordPress posts',i)
 
 #Define main function
 def main():
