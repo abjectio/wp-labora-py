@@ -14,7 +14,6 @@ from subprocess import check_output
 import ConfigParser, os, sys, logging
 
 
-
 #Function - read all configs
 def populateConfigs():
 
