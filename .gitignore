@@ -1,3 +1,4 @@
+*.log
 *.ics
 wp
 wp-cli.yml
