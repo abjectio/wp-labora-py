@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+#https://www.python.org/dev/peps/pep-0008/ - coding style
 #https://python-wordpress-xmlrpc.readthedocs.org/
 #https://github.com/maxcutler/python-wordpress-xmlrpc.git
 #https://github.com/collective/icalendar
@@ -11,11 +11,14 @@ from wordpress_xmlrpc.methods.users import GetUserInfo
 from datetime import datetime
 from icalendar import Calendar, vDDDTypes, Event
 from subprocess import check_output
-import ConfigParser, os, sys, logging
+import ConfigParser
+import os
+import sys
+import logging
 
 
 #Function - read all configs
-def populateConfigs():
+def populate_configs():
 
 	#Get config file to read
 	if len(sys.argv)<=1:
@@ -24,36 +27,50 @@ def populateConfigs():
 		sys.exit(2)
 
 	cfgfilename = sys.argv[1]
-	if not os.path.isfile(cfgfilename):
-		logging.error('Configuration file not found: [' + cfgfilename + ']')
-		sys.exit(2)
-
-	logging.info('Reading configs from file : [' + cfgfilename + ']')
 	parser = ConfigParser.ConfigParser();
-	parser.readfp(open(cfgfilename))
+	try:		
+		parser.readfp(open(cfgfilename))
+		logging.info('Reading configs from file : [' + cfgfilename + ']')
+	except Exception as e:
+		logging.error('Could not read configfile !! - %s ', e)
+		logging.error('[EXIT AND ENDS IMPORT]')
+		sys.exit(2)
 	return parser
 
-
 #Read configurations from file
-def exportICSFile(medarb_ics_url, gudstjenester_ics):
+def export_ics_file(medarb_ics_url, gudstjenester_ics):
+	
 	#EXPORT ICS
 	logging.info('Get ICS file: [' + medarb_ics_url + ']')
-	export_ics = check_output(["curl","--silent",medarb_ics_url])
-	if export_ics:
-		f = open(gudstjenester_ics,'w')
-		f.write(export_ics)
-		f.close()
+	
+	try:
+		export_ics = check_output(["curl","--silent",medarb_ics_url])
+		if export_ics:
+			f = open(gudstjenester_ics,'w')
+			f.write(export_ics)
+			f.close()
+	except Exception as e:
+		logging.error('Could not get ICS File !! - %s ', e)
+		logging.error('[EXIT AND ENDS IMPORT]')
+		sys.exit(2)
+
 
 #Initate a WordPress connection - xmlrpc
-def initateWP(wp_url, wp_user, wp_pwd):
+def get_wordpress_client(wp_url, wp_user, wp_pwd):
 	#New WordPress object
 	logging.info('Initate WordPress client Instance')
-	wp = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
-	return wp
+	
+	try:
+		wp = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
+		return wp
+	except Exception as e:
+		logging.error('Could not get wordpress client !! - %s - URL: %s ', e, wp_url)
+		logging.error('[EXIT AND ENDS IMPORT]')
+		sys.exit(2)		
 
 #Get all WordPressPost IDs of a specific type
 #Return all ids found
-def getAllIDs(client, event_category):
+def get_all_ids(client, event_category):
 	#Get all IDs of Posts of post_type 'event'
 	logging.info('Get all posts with category-event: [' + event_category + '] and delete those')
 	offset = 0
@@ -70,8 +87,8 @@ def getAllIDs(client, event_category):
 	#Return array of WordPress post IDs
 	return ids
 	
-
-def deleteWPPosts(client, ids, dry_run):
+#Delete a range of WordPress posts 
+def delete_wp_posts(client, ids, dry_run):
 	#Iterate and delete posts
 	for delete_id in ids:
 		logging.info('Deleting WordpressPost with ID: [' + delete_id + ']')	
@@ -80,14 +97,20 @@ def deleteWPPosts(client, ids, dry_run):
 				
 	logging.info('Deleted %s WordPress posts',len(ids))
 
-def readICALFile(fileName):
+#Read the ICAL file
+def read_ical_file(filename):
 	#OPEN ICS FILE
-	logging.info('Reading ICAL file: [' + fileName +']')
-	cal = Calendar.from_ical(open(fileName,'rb').read())
-	return cal
+	logging.info('Reading ICAL file: [' + filename +']')	
+	try:
+		cal = Calendar.from_ical(open(filename,'rb').read())
+		return cal
+	except Exception as e:
+		logging.error('Could not get an Calendar from file !! - %s - FILE: %s ', e, filename)
+		logging.error('[EXIT AND ENDS IMPORT]')
+		sys.exit(2)
 
-
-def createNewWPPost(client, component, event_category, dry_run):
+#Create a new WordPress post
+def create_new_wp_post(client, component, event_category, dry_run):
 	
 	summary = component.get('SUMMARY').encode('UTF-8','backslashreplace')
 	start_event = component.get('DTSTART').dt.strftime('%Y-%m-%d %H:%M')
@@ -140,10 +163,10 @@ def createNewWPPost(client, component, event_category, dry_run):
 		client.call(NewPost(new_post))
 
 #Create new WordPress posts from ICalendar object
-def createAllPostsFromICal(client, ical, event_category, dry_run):
+def create_all_posts_from_ical(client, ical, event_category, dry_run):
 	i=0
 	for component in ical.walk('VEVENT'):
-		createNewWPPost(client, component, event_category, dry_run)
+		create_new_wp_post(client, component, event_category, dry_run)
 		i += 1
 	logging.info('Created %s WordPress posts',i)
 
@@ -158,7 +181,7 @@ def main():
 	logging.info('[START IMPORT]')
 	
 	#Populate the configs
-	parser = populateConfigs()
+	parser = populate_configs()
 	
 	#Config header name
 	section = "config"
@@ -174,22 +197,22 @@ def main():
 		logging.info('It\'s a DRY run');
 	
 	#Export the ICS file
-	exportICSFile(medarb_ics_url, ics_filename)
+	export_ics_file(medarb_ics_url, ics_filename)
 	
 	#Initate WordPress Client
-	client = initateWP(wp_url, wp_user, wp_pwd)
+	client = get_wordpress_client(wp_url, wp_user, wp_pwd)
 	
 	#Getting all IDs to delete
-	ids = getAllIDs(client,event_category)
+	ids = get_all_ids(client,event_category)
 	
 	#Delete wordpress posts
-	deleteWPPosts(client, ids, dry_run)
+	delete_wp_posts(client, ids, dry_run)
 	
 	#Get the new Calendar
-	cal = readICALFile(ics_filename)
+	cal = read_ical_file(ics_filename)
 	
 	#Create new posts
-	createAllPostsFromICal(client, cal, event_category, dry_run)
+	create_all_posts_from_ical(client, cal, event_category, dry_run)
 
 	#
 	logging.info('[END IMPORT]')
