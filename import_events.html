@@ -1,0 +1,77 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module import_events</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>import_events</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/abjectio/koding/wp-labora-py/import_events.py">/home/abjectio/koding/wp-labora-py/import_events.py</a></font></td></tr></table>
+    <p><tt>:mod:`import_events`&nbsp;--&nbsp;Importing&nbsp;ical&nbsp;events&nbsp;into&nbsp;WordPress&nbsp;posts<br>
+==================================================================<br>
+&nbsp;<br>
+..&nbsp;module::&nbsp;import_events<br>
+&nbsp;&nbsp;&nbsp;:platform:&nbsp;Unix,&nbsp;Windows<br>
+&nbsp;&nbsp;&nbsp;:synopsis:&nbsp;Importing&nbsp;ical&nbsp;events&nbsp;into&nbsp;WordPress&nbsp;posts.<br>
+..&nbsp;moduleauthor::&nbsp;Eric&nbsp;Cleese&nbsp;&lt;knut.erik@unlike.no&gt;<br>
+&nbsp;<br>
+This&nbsp;file&nbsp;is&nbsp;part&nbsp;of&nbsp;import_events&nbsp;python&nbsp;code.<br>
+&nbsp;<br>
+import_events&nbsp;is&nbsp;free&nbsp;software:&nbsp;you&nbsp;can&nbsp;redistribute&nbsp;it&nbsp;and/or&nbsp;modify<br>
+it&nbsp;under&nbsp;the&nbsp;terms&nbsp;of&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public&nbsp;License&nbsp;as&nbsp;published&nbsp;by<br>
+the&nbsp;Free&nbsp;Software&nbsp;Foundation,&nbsp;either&nbsp;version&nbsp;3&nbsp;of&nbsp;the&nbsp;License,&nbsp;or<br>
+(at&nbsp;your&nbsp;option)&nbsp;any&nbsp;later&nbsp;version.<br>
+&nbsp;<br>
+import_events&nbsp;is&nbsp;distributed&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;will&nbsp;be&nbsp;useful,<br>
+but&nbsp;WITHOUT&nbsp;ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nbsp;of<br>
+MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.&nbsp;&nbsp;See&nbsp;the<br>
+GNU&nbsp;General&nbsp;Public&nbsp;License&nbsp;for&nbsp;more&nbsp;details.<br>
+&nbsp;<br>
+You&nbsp;should&nbsp;have&nbsp;received&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public&nbsp;License<br>
+along&nbsp;with&nbsp;import_events.&nbsp;&nbsp;If&nbsp;not,&nbsp;see&nbsp;&lt;<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.<br>
+&nbsp;<br>
+----------------------------------------------------------------------<br>
+&nbsp;<br>
+import_events&nbsp;-&nbsp;is&nbsp;a&nbsp;script&nbsp;which&nbsp;imports&nbsp;ical&nbsp;events&nbsp;into&nbsp;WordPress&nbsp;posts.<br>
+Dependent&nbsp;on&nbsp;-&nbsp;pytz,&nbsp;iCalendar&nbsp;and&nbsp;python-wordpress-xmlrpc<br>
+&nbsp;<br>
+&lt;https://python-wordpress-xmlrpc.readthedocs.org/&gt;<br>
+&lt;https://github.com/maxcutler/python-wordpress-xmlrpc.git/&gt;<br>
+&lt;https://github.com/collective/icalendar/&gt;<br>
+pip&nbsp;install&nbsp;pytz</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ConfigParser.html">ConfigParser</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+</td><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-create_all_posts_from_ical"><strong>create_all_posts_from_ical</strong></a>(client, ical, event_category, dry_run)</dt><dd><tt>Create&nbsp;new&nbsp;WordPress&nbsp;posts&nbsp;from&nbsp;ICalendar&nbsp;object</tt></dd></dl>
+ <dl><dt><a name="-create_new_wp_post"><strong>create_new_wp_post</strong></a>(client, component, event_category, dry_run)</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;WordPress&nbsp;post</tt></dd></dl>
+ <dl><dt><a name="-delete_wp_posts"><strong>delete_wp_posts</strong></a>(client, ids, dry_run)</dt><dd><tt>Delete&nbsp;a&nbsp;range&nbsp;of&nbsp;WordPress&nbsp;posts</tt></dd></dl>
+ <dl><dt><a name="-export_ics_file"><strong>export_ics_file</strong></a>(ics_url, output_file)</dt><dd><tt>Read&nbsp;configurations&nbsp;from&nbsp;file.<br>
+&nbsp;<br>
+:param&nbsp;ics_url:&nbsp;URL&nbsp;to&nbsp;ICS&nbsp;stream/ICal&nbsp;file<br>
+:param&nbsp;output_file:&nbsp;Name&nbsp;of&nbsp;file&nbsp;to&nbsp;write&nbsp;the&nbsp;ICal&nbsp;resluts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+:return:&nbsp;returns&nbsp;nothing</tt></dd></dl>
+ <dl><dt><a name="-get_all_ids"><strong>get_all_ids</strong></a>(client, event_category)</dt><dd><tt>Get&nbsp;all&nbsp;WordPressPost&nbsp;IDs&nbsp;of&nbsp;a&nbsp;specific&nbsp;type</tt></dd></dl>
+ <dl><dt><a name="-get_wordpress_client"><strong>get_wordpress_client</strong></a>(wp_url, wp_user, wp_pwd)</dt><dd><tt>Initate&nbsp;a&nbsp;WordPress&nbsp;connection&nbsp;-&nbsp;xmlrpc.</tt></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>main&nbsp;function</tt></dd></dl>
+ <dl><dt><a name="-populate_configs"><strong>populate_configs</strong></a>()</dt><dd><tt>Populating&nbsp;all&nbsp;configs&nbsp;from&nbsp;a&nbsp;config&nbsp;file.</tt></dd></dl>
+ <dl><dt><a name="-read_ical_file"><strong>read_ical_file</strong></a>(filename)</dt><dd><tt>Read&nbsp;the&nbsp;ICAL&nbsp;file</tt></dd></dl>
+</td></tr></table>
+</body></html>
