@@ -1,5 +1,6 @@
 #!/usr/bin/python
 #https://www.python.org/dev/peps/pep-0008/ - coding style
+#https://www.python.org/dev/peps/pep-0257/
 #https://python-wordpress-xmlrpc.readthedocs.org/
 #https://github.com/maxcutler/python-wordpress-xmlrpc.git
 #https://github.com/collective/icalendar
@@ -17,8 +18,8 @@ import sys
 import logging
 
 
-#Function - read all configs
 def populate_configs():
+	"""Populating all configs from a config file."""
 
 	#Get config file to read
 	if len(sys.argv)<=1:
@@ -37,8 +38,9 @@ def populate_configs():
 		sys.exit(2)
 	return parser
 
-#Read configurations from file
+
 def export_ics_file(medarb_ics_url, gudstjenester_ics):
+	"""Read configurations from file"""
 	
 	#EXPORT ICS
 	logging.info('Get ICS file: [' + medarb_ics_url + ']')
@@ -55,8 +57,10 @@ def export_ics_file(medarb_ics_url, gudstjenester_ics):
 		sys.exit(2)
 
 
-#Initate a WordPress connection - xmlrpc
+
 def get_wordpress_client(wp_url, wp_user, wp_pwd):
+	"""Initate a WordPress connection - xmlrpc."""
+	
 	#New WordPress object
 	logging.info('Initate WordPress client Instance')
 	
@@ -68,9 +72,10 @@ def get_wordpress_client(wp_url, wp_user, wp_pwd):
 		logging.error('[EXIT AND ENDS IMPORT]')
 		sys.exit(2)		
 
-#Get all WordPressPost IDs of a specific type
-#Return all ids found
+
 def get_all_ids(client, event_category):
+	"""Get all WordPressPost IDs of a specific type"""
+
 	#Get all IDs of Posts of post_type 'event'
 	logging.info('Get all posts with category-event: [' + event_category + '] and delete those')
 	offset = 0
@@ -87,8 +92,10 @@ def get_all_ids(client, event_category):
 	#Return array of WordPress post IDs
 	return ids
 	
-#Delete a range of WordPress posts 
+
 def delete_wp_posts(client, ids, dry_run):
+	"""Delete a range of WordPress posts"""
+
 	#Iterate and delete posts
 	for delete_id in ids:
 		logging.info('Deleting WordpressPost with ID: [' + delete_id + ']')	
@@ -97,8 +104,10 @@ def delete_wp_posts(client, ids, dry_run):
 				
 	logging.info('Deleted %s WordPress posts',len(ids))
 
-#Read the ICAL file
+
 def read_ical_file(filename):
+	"""Read the ICAL file"""	
+
 	#OPEN ICS FILE
 	logging.info('Reading ICAL file: [' + filename +']')	
 	try:
@@ -109,8 +118,9 @@ def read_ical_file(filename):
 		logging.error('[EXIT AND ENDS IMPORT]')
 		sys.exit(2)
 
-#Create a new WordPress post
+
 def create_new_wp_post(client, component, event_category, dry_run):
+	"""Create a new WordPress post"""
 	
 	summary = component.get('SUMMARY').encode('UTF-8','backslashreplace')
 	start_event = component.get('DTSTART').dt.strftime('%Y-%m-%d %H:%M')
@@ -162,20 +172,21 @@ def create_new_wp_post(client, component, event_category, dry_run):
 	if not dry_run:
 		client.call(NewPost(new_post))
 
-#Create new WordPress posts from ICalendar object
+
 def create_all_posts_from_ical(client, ical, event_category, dry_run):
+	"""Create new WordPress posts from ICalendar object"""
+
 	i=0
 	for component in ical.walk('VEVENT'):
 		create_new_wp_post(client, component, event_category, dry_run)
 		i += 1
 	logging.info('Created %s WordPress posts',i)
 
-#Define main function
+
 def main():
+	"""main function"""
 
-	#print logging.INFO #20
-	#print logging.DEBUG #10
-
+	
 	#Logging
 	logging.basicConfig(filename='import_events.log', level=logging.INFO)
 	logging.info('[START IMPORT]')
@@ -213,7 +224,7 @@ def main():
 	
 	#Create new posts
 	create_all_posts_from_ical(client, cal, event_category, dry_run)
-
+	
 	#
 	logging.info('[END IMPORT]')
     
