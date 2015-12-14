@@ -1,13 +1,26 @@
 """
-:mod:`lib.ical` -- Library for handling ICAL
+:mod:`lib.wputil` -- Library for handling WordPress interaction
 ==================================================================
 
-.. module:: ical
+.. module:: wputil
    :platform: Unix, Windows
-   :synopsis: Library for handling ical
+   :synopsis: Library for handling WordPress interaction
 .. moduleauthor:: Knut Erik Hollund <knut.erik@unlike.no>
 
 This file is part of import_events python code.
+
+import_events is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+import_events is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with import_events.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 from wordpress_xmlrpc import Client, WordPressPost
