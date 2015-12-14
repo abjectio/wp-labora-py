@@ -41,6 +41,7 @@ from wordpress_xmlrpc.methods.posts import GetPosts, NewPost, DeletePost
 from icalendar import Calendar
 from subprocess import check_output
 import ConfigParser
+from ConfigParser import Error
 import sys
 import logging
 
@@ -58,7 +59,7 @@ def populate_configs():
     try:
         parser.readfp(open(config_filename))
         logging.info('Reading configs from file : [' + config_filename + ']')
-    except Exception as exception:
+    except IOError as exception:
         logging.error('Could not read configfile !! - %s ', exception)
         logging.error('[EXIT AND ENDS IMPORT]')
         sys.exit(2)
@@ -83,7 +84,7 @@ def export_ics_file(ics_url, output_file):
             ofile = open(output_file, 'w')
             ofile.write(export_ics)
             ofile.close()
-    except Exception as exception:
+    except IOError as exception:
         logging.error('Could not get ICS File !! - %s ', exception)
         logging.error('[EXIT AND ENDS IMPORT]')
         sys.exit(2)
@@ -99,7 +100,7 @@ def get_wordpress_client(wp_url, wp_user, wp_pwd):
     try:
         client = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
         return client
-    except Exception as exception:
+    except IOError as exception:
         logging.error('Could not get wordpress client !! \
          - %s - URL: %s ', exception, wp_url)
         logging.error('[EXIT AND ENDS IMPORT]')
@@ -148,7 +149,7 @@ def read_ical_file(filename):
     try:
         cal = Calendar.from_ical(open(filename, 'rb').read())
         return cal
-    except Exception as exception:
+    except Error as exception:
         logging.error('Could not get an Calendar from file !! \
          - %s - FILE: %s ', exception, filename)
         logging.error('[EXIT AND ENDS IMPORT]')
