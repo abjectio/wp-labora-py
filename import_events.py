@@ -60,10 +60,15 @@ def main():
     wp_pwd = parser_config.get(section, 'wp_pwd')
     event_category = parser_config.get(section, 'event_category')
     dry_run = parser_config.get(section, 'dry_run')
-
-    if dry_run:
-        loginfo('It\'s a DRY run')
-
+    
+   
+    if dry_run.lower() in ['1','true']:
+		loginfo('It\'s a DRY run')
+		dry_run = True
+    else:
+        dry_run = False
+        
+    
     #Export the ICS file
     export_ics_file(ics_url, ics_filename)
 
