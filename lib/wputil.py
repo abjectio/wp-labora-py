@@ -133,7 +133,9 @@ def create_new_wp_post(client, component, event_category, dry_run):
 
     #Add New Post and it's meta data
     loginfo('Create a new WordPressPost - Title: [' + \
-    new_post.title + '] Starts: [' + start_event + '] Ends: [' + \
+    new_post.title + '] Description: [' + \
+    new_post.content + '] ' + \
+    'Starts: [' + start_event + '] Ends: [' + \
     end_event + ']')
     if not dry_run:
         client.call(NewPost(new_post))
