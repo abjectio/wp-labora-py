@@ -74,7 +74,10 @@ def delete_wp_posts(client, ids, dry_run):
     for delete_id in ids:
         loginfo('Deleting WordpressPost with ID: [' + delete_id + ']')
         if not dry_run:
-            client.call(DeletePost(delete_id))
+            try:
+                client.call(DeletePost(delete_id))
+            except Exception as e:
+                loginfo('Exception deleting post with ID: [' + delete_id + ']' + e)
 
     loginfo(('Deleted %s WordPress posts', len(ids)))
 
