@@ -45,7 +45,7 @@ def main():
     """main function"""
 
     #Logging
-    initiate_logging("import_events.log")
+    initiate_logging("/tmp/import_events.log")
     loginfo('[START IMPORT]')
 
     #Populate the configs
