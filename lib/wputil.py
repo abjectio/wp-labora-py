@@ -38,9 +38,9 @@ def get_wordpress_client(wp_url, wp_user, wp_pwd):
     try:
         client = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
         return client
-    except IOError as exception:
-        logerror(('Could not get wordpress client !! \
-         - %s - URL: %s ', exception, wp_url))
+    except Exception as exception:
+        logerror('Could not get wordpress client !! \
+         - ' + str(exception) + ' - URL: ' + wp_url)
         logerror('[EXIT AND ENDS IMPORT]')
         sys.exit(2)
 
