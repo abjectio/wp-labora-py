@@ -59,6 +59,8 @@ def main():
     wp_user = parser_config.get(section, 'wp_user')
     wp_pwd = parser_config.get(section, 'wp_pwd')
     event_category = parser_config.get(section, 'event_category')
+    event_map_location = parser_config.get(section, 'event_map_location')
+    location_gps = parser_config.get(section, 'location_gps')
     dry_run = parser_config.get(section, 'dry_run')
     
    
@@ -85,7 +87,7 @@ def main():
     cal = read_ical_file(ics_filename)
 
     #Create new posts
-    create_all_posts_from_ical(client, cal, event_category, dry_run)
+    create_all_posts_from_ical(client, cal, event_category, event_map_location, location_gps, dry_run)
 
     #
     loginfo('[END IMPORT]')

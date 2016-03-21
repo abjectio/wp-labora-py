@@ -1,8 +1,10 @@
 [config]
 ics_url=<URL TO iCal download>
-ics_filename=events.ics
+ics_filename=/tmp/events.ics
 wp_user=admin
 wp_pwd=<Password for WP user>
 wp_url=http://localhost:80
 event_category=<WordPress category>
+event_map_location=<Location address in text>
+location_gps=<Location GPS in numbers e.g. 56.23455599999999, 4.703353000000028>
 dry_run=<1 | 0>

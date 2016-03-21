@@ -84,7 +84,7 @@ def delete_wp_posts(client, ids, dry_run):
 
 
 
-def create_new_wp_post(client, component, event_category, dry_run):
+def create_new_wp_post(client, component, event_category, event_map_location, location_gps, dry_run):
     """Create a new WordPress post"""
 
     summary = component.get('SUMMARY').encode('UTF-8', 'backslashreplace')
@@ -117,9 +117,8 @@ def create_new_wp_post(client, component, event_category, dry_run):
                 ['imic_custom_event_registration_target', '0'],
                 ['imic_sidebar_columns_layout', '3'],
                 ['imic_google_map_track', '1'],
-                ['imic_event_address2', 'Tananger kirke, Sola, Norway'],
-                ['imic_event_map_location', '58.93535599999999, \
-                5.600313000000028'],
+                ['imic_event_address2', event_map_location],
+                ['imic_event_map_location', location_gps],
                 ['imic_pages_banner_overlay', '0'],
                 ['imic_pages_banner_animation', '0'],
                 ['imic_pages_select_revolution_from_list', '[rev_slider fsl]'],
@@ -144,12 +143,12 @@ def create_new_wp_post(client, component, event_category, dry_run):
         client.call(NewPost(new_post))
 
 
-def create_all_posts_from_ical(client, ical, event_category, dry_run):
+def create_all_posts_from_ical(client, ical, event_category,event_map_location, location_gps, dry_run):
     """Create new WordPress posts from ICalendar object"""
 
     i = 0
     for component in ical.walk('VEVENT'):
-        create_new_wp_post(client, component, event_category, dry_run)
+        create_new_wp_post(client, component, event_category, event_map_location, location_gps, dry_run)
         i += 1
     loginfo('Finished created all posts count => ' +str(i))
 
