@@ -79,7 +79,7 @@ def delete_wp_posts(client, ids, dry_run):
             except Exception as e:
                 loginfo('Exception deleting post with ID: [' + delete_id + ']' + e)
 
-    loginfo('Finished deleting posts count => ' + ids.count.tostring)
+    loginfo('Finished deleting posts count => ' + str(len(ids)))
 
 
 
@@ -151,4 +151,5 @@ def create_all_posts_from_ical(client, ical, event_category, dry_run):
     for component in ical.walk('VEVENT'):
         create_new_wp_post(client, component, event_category, dry_run)
         i += 1
-    loginfo(('Created %s WordPress posts', i))
+    loginfo('Finished created all posts count => ' +str(i))
+
