@@ -79,7 +79,7 @@ def delete_wp_posts(client, ids, dry_run):
             except Exception as e:
                 loginfo('Exception deleting post with ID: [' + delete_id + ']' + e)
 
-    loginfo(('Deleted %s WordPress posts', len(ids)))
+    loginfo('Finished deleting posts count => ' + len(ids))
 
 
 
