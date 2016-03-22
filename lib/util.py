@@ -54,10 +54,10 @@ def populate_configs():
     config_filename = sys.argv[1]
     parser = ConfigParser.ConfigParser()
     try:
-        parser.readfp(open(config_filename))
         loginfo('Reading configs from file : [' + config_filename + ']')
+        parser.readfp(open(config_filename))
     except IOError as exception:
-        logerror(('Could not read configfile !! - %s ', exception))
+        logerror('Could not read configfile! - ' + str(exception))
         logerror('[EXIT AND ENDS IMPORT]')
         sys.exit(2)
 
