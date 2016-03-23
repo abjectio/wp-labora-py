@@ -43,6 +43,10 @@ def loginfo(info_message):
     """Logging info message"""
     logging.info(info_message)
 
+def shutdownLogger():
+    """Proper shutdown of logger"""
+    logging.shutdown()
+
 def populate_configs():
     """Populating all configs from a config file."""
     #Get config file to read

@@ -30,10 +30,10 @@ import sys
 
 
 def get_wordpress_client(wp_url, wp_user, wp_pwd):
-    """Initate a WordPress connection - xmlrpc."""
+    """Get WordPress connection - xmlrpc."""
 
     #New WordPress object
-    loginfo('Initate WordPress client Instance')
+    loginfo('Get WordPress client instance')
 
     try:
         client = Client(wp_url + '/xmlrpc.php', wp_user, wp_pwd)
@@ -50,7 +50,7 @@ def get_all_ids(client, event_category):
 
     #Get all IDs of Posts of post_type 'event'
     loginfo('Get all posts with category-event: [' + \
-    event_category + '] and delete those')
+    event_category + ']')
     offset = 0
     increment = 10
     ids = []
@@ -72,12 +72,12 @@ def delete_wp_posts(client, ids, dry_run):
 
     #Iterate and delete posts
     for delete_id in ids:
-        loginfo('Deleting WordpressPost with ID: [' + delete_id + ']')
+        loginfo('Deleting post ID: [' + delete_id + ']')
         if not dry_run:
             try:
                 client.call(DeletePost(delete_id))
             except Exception as e:
-                loginfo('Exception deleting post with ID: [' + str(delete_id) + '] ' + str(e))
+                loginfo('Exception deleting post ID: [' + str(delete_id) + '] ' + str(e))
 
     loginfo('Finished deleting posts count => ' + str(len(ids)))
 
@@ -134,10 +134,10 @@ def create_new_wp_post(client, component, event_category, event_map_location, lo
         new_post.custom_fields.append({'key':i[0], 'value':i[1]})
 
     #Add New Post and it's meta data
-    loginfo('Create a new WordPressPost - Title: [' + \
+    loginfo('Create new post - Title: [' + \
     new_post.title + '] Description: [' + \
     new_post.content + '] ' + \
-    'Starts: [' + start_event + '] Ends: [' + \
+    'Start: [' + start_event + '] End: [' + \
     end_event + ']')
     if not dry_run:
         client.call(NewPost(new_post))
@@ -150,5 +150,5 @@ def create_all_posts_from_ical(client, ical, event_category,event_map_location, 
     for component in ical.walk('VEVENT'):
         create_new_wp_post(client, component, event_category, event_map_location, location_gps, dry_run)
         i += 1
-    loginfo('Finished created all posts count => ' +str(i))
+    loginfo('Finished created posts count => ' +str(i))
 

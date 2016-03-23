@@ -91,6 +91,7 @@ def main():
 
     #
     loginfo('[END IMPORT]')
+    shutdownLogger()
 
 #############
 #Execute main
