@@ -150,5 +150,5 @@ def create_all_posts_from_ical(client, ical, event_category,event_map_location, 
     for component in ical.walk('VEVENT'):
         create_new_wp_post(client, component, event_category, event_map_location, location_gps, dry_run)
         i += 1
-    loginfo('Finished created posts count => ' +str(i))
+    loginfo('Finished adding new posts count => ' +str(i))
 
