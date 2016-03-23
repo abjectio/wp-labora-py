@@ -29,7 +29,7 @@ import ConfigParser
 
 def initiate_logging(file_name):
     """ Initate a logger with configs """
-    logging.basicConfig(filename=file_name, level=logging.INFO)
+    logging.basicConfig(format='[%(asctime)s-%(levelname)s] %(message)s',datefmt='%H:%M:%S',filename=file_name, level=logging.INFO, filemode="w")
 
 def logerror(error_message):
     """Logging error message"""
@@ -54,10 +54,10 @@ def populate_configs():
     config_filename = sys.argv[1]
     parser = ConfigParser.ConfigParser()
     try:
-        loginfo('Reading configs from file : [' + config_filename + ']')
+        loginfo('Config file : [' + config_filename + ']')
         parser.readfp(open(config_filename))
     except IOError as exception:
-        logerror('Could not read configfile! - ' + str(exception))
+        logerror('Could not read file! - ' + str(exception))
         logerror('[EXIT AND ENDS IMPORT]')
         sys.exit(2)
 
