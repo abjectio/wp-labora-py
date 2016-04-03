@@ -22,5 +22,7 @@ The curl package - apt-get install curl
 <https://github.com/maxcutler/python-wordpress-xmlrpc.git/>
 <https://github.com/collective/icalendar/>
 pip install pytz - or - apt-get install python-pytz
+pip install logging
+apt-get install python-pip
 apt-get install python-dateutil
 ```

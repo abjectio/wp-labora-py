@@ -39,7 +39,7 @@ pip install pytz
 from lib.ical import export_ics_file, read_ical_file
 from lib.wputil import get_wordpress_client, get_all_ids, \
     delete_wp_posts, create_all_posts_from_ical
-from lib.util import populate_configs, initiate_logging, loginfo
+from lib.util import populate_configs, initiate_logging, loginfo, shutdownLogger
 
 def main():
     """main function"""
