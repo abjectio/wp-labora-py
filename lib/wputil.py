@@ -60,7 +60,7 @@ def get_all_ids(client, event_category):
         if len(posts) == 0:
             break #break no more post
         for one_post in posts:
-            if one_post.terms[0].name == event_category:
+            if (one_post.terms is None and one_post.terms[0].name == event_category):
                 ids.append(one_post.id)
         offset += increment
     #Return array of WordPress post IDs
