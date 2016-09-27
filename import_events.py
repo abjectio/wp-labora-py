@@ -34,21 +34,22 @@ Dependent on - pytz, iCalendar and python-wordpress-xmlrpc
 pip install pytz
 
 """
-#https://www.python.org/dev/peps/pep-0008/ - coding style
-#https://www.python.org/dev/peps/pep-0257/
+# https://www.python.org/dev/peps/pep-0008/ - coding style
+# https://www.python.org/dev/peps/pep-0257/
 from lib.ical import export_ics_file, read_ical_file
 from lib.wputil import get_wordpress_client, get_all_ids, \
     delete_wp_posts, create_all_posts_from_ical
 from lib.util import populate_configs, initiate_logging, loginfo, shutdownLogger
 
+
 def main():
     """main function"""
 
-    #Logging
+    # Logging
     initiate_logging("/tmp/import_events.log")
     loginfo('[START IMPORT]')
 
-    #Populate the configs
+    # Populate the configs
     parser_config = populate_configs()
 
     #Config header name
@@ -62,38 +63,37 @@ def main():
     event_map_location = parser_config.get(section, 'event_map_location')
     location_gps = parser_config.get(section, 'location_gps')
     dry_run = parser_config.get(section, 'dry_run')
-    
    
-    if dry_run.lower() in ['1','true']:
-		loginfo('It\'s a DRY run')
-		dry_run = True
+    if dry_run.lower() in ['1', 'true']:
+        loginfo('It\'s a DRY run')
+        dry_run = True
     else:
         dry_run = False
-        
     
-    #Export the ICS file
-    export_ics_file(ics_url, ics_filename)
+    # Export the ICS file
+    if export_ics_file(ics_url, ics_filename):
 
-    #Initate WordPress Client
-    client = get_wordpress_client(wp_url, wp_user, wp_pwd)
+        # Initate WordPress Client
+        client = get_wordpress_client(wp_url, wp_user, wp_pwd)
 
-    #Getting all IDs to delete
-    ids = get_all_ids(client, event_category)
+        # Getting all IDs to delete
+        ids = get_all_ids(client, event_category)
 
-    #Delete wordpress posts
-    delete_wp_posts(client, ids, dry_run)
+        # Delete wordpress posts
+        delete_wp_posts(client, ids, dry_run)
 
-    #Get the new Calendar
-    cal = read_ical_file(ics_filename)
+        # Get the new Calendar
+        cal = read_ical_file(ics_filename)
 
-    #Create new posts
-    create_all_posts_from_ical(client, cal, event_category, event_map_location, location_gps, dry_run)
+        # Create new posts
+        if cal is not None:
+            create_all_posts_from_ical(client, cal, event_category, event_map_location, location_gps, dry_run)
 
     #
     loginfo('[END IMPORT]')
     shutdownLogger()
 
 #############
-#Execute main
+# Execute main
 if __name__ == '__main__':
     main()

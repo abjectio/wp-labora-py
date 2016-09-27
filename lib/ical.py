@@ -29,6 +29,7 @@ from subprocess import check_output
 from lib.util import loginfo, logerror
 import sys
 
+
 def export_ics_file(ics_url, output_file):
     """Read configurations from file.
 
@@ -37,7 +38,7 @@ def export_ics_file(ics_url, output_file):
     :return: returns nothing
     """
 
-    #EXPORT ICS
+    # EXPORT ICS
     loginfo('Get ICS file: [' + ics_url + ']')
 
     try:
@@ -46,22 +47,27 @@ def export_ics_file(ics_url, output_file):
             ofile = open(output_file, 'w')
             ofile.write(export_ics)
             ofile.close()
-    except IOError as exception:
-        logerror(('Could not get ICS File !! - %s ', exception))
+        if 'BEGIN:VCALENDAR' not in export_ics and 'END:VCALENDAR' not in export_ics:
+            raise Exception('Not an iCal file? Missing BEGIN:VCALENDAR and END:VCALENDAR in iCal file! File name: '
+                            + output_file)
+
+    except Exception as exception:
+        logerror('Error reading/writing iCal File! ' + str(exception))
         logerror('[EXIT AND ENDS IMPORT]')
-        sys.exit(2)
+        return False
+
+    return True
 
 
 def read_ical_file(filename):
     """Read the ICAL file"""
 
-    #OPEN ICS FILE
-    loginfo('Reading ICAL file: [' + filename +']')
+    # OPEN ICS FILE
+    loginfo('Reading ICAL file: [' + filename + ']')
     try:
         cal = Calendar.from_ical(open(filename, 'rb').read())
         return cal
-    except IOError as exception:
-        logerror(('Could not get an Calendar from file !! \
-         - %s - FILE: %s ', exception, filename))
+    except Exception as exception:
+        logerror('Could not get an Calendar from file !! Exception: ' + str(exception) + '. File name: ' + filename)
         logerror('[EXIT AND ENDS IMPORT]')
-        sys.exit(2)
+        return None

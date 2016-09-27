@@ -32,7 +32,7 @@ import sys
 def get_wordpress_client(wp_url, wp_user, wp_pwd):
     """Get WordPress connection - xmlrpc."""
 
-    #New WordPress object
+    # New WordPress object
     loginfo('Get WordPress client instance')
 
     try:
@@ -48,29 +48,27 @@ def get_wordpress_client(wp_url, wp_user, wp_pwd):
 def get_all_ids(client, event_category):
     """Get all WordPressPost IDs of a specific type"""
 
-    #Get all IDs of Posts of post_type 'event'
-    loginfo('Get all posts with category-event: [' + \
-    event_category + ']')
+    # Get all IDs of Posts of post_type 'event'
+    loginfo('Get all posts with category-event: [' + event_category + ']')
     offset = 0
     increment = 10
     ids = []
     while True:
-        posts = client.call(GetPosts({'post_type': 'event', 'number': \
-        increment, 'offset': offset}))
+        posts = client.call(GetPosts({'post_type': 'event', 'number': increment, 'offset': offset}))
         if len(posts) == 0:
-            break #break no more post
+            break # break no more post
         for one_post in posts:
-            if ( len(one_post.terms)>0 and one_post.terms[0].name == event_category):
+            if len(one_post.terms) > 0 and one_post.terms[0].name == event_category:
                 ids.append(one_post.id)
         offset += increment
-    #Return array of WordPress post IDs
+    # Return array of WordPress post IDs
     return ids
 
 
 def delete_wp_posts(client, ids, dry_run):
     """Delete a range of WordPress posts"""
 
-    #Iterate and delete posts
+    # Iterate and delete posts
     for delete_id in ids:
         loginfo('Deleting post ID: [' + delete_id + ']')
         if not dry_run:
@@ -82,8 +80,6 @@ def delete_wp_posts(client, ids, dry_run):
     loginfo('Finished deleting posts count => ' + str(len(ids)))
 
 
-
-
 def create_new_wp_post(client, component, event_category, event_map_location, location_gps, dry_run):
     """Create a new WordPress post"""
 
@@ -91,9 +87,7 @@ def create_new_wp_post(client, component, event_category, event_map_location, lo
     start_event = component.get('DTSTART').dt.strftime('%Y-%m-%d %H:%M')
     end_event = component.get('DTEND').dt.strftime('%Y-%m-%d %H:%M')
     end_frequency_event = component.get('DTEND').dt.strftime('%Y-%m-%d')
-    event_description = component.get('DESCRIPTION').encode('UTF-8', \
-    'backslashreplace')
-
+    event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
 
     # Create a new post
     new_post = WordPressPost()
@@ -129,11 +123,11 @@ def create_new_wp_post(client, component, event_category, event_map_location, lo
                 ['imic_pages_slider_effects', 'fade'],
                 ['imic_pages_nivo_effects', 'sliceDown'])
 
-    #Iterate over array creating meta in post
+    # Iterate over array creating meta in post
     for i in meta_adds:
-        new_post.custom_fields.append({'key':i[0], 'value':i[1]})
+        new_post.custom_fields.append({'key': i[0], 'value': i[1]})
 
-    #Add New Post and it's meta data
+    # Add New Post and it's meta data
     loginfo('Create new post - Title: [' + \
     new_post.title + '] Description: [' + \
     new_post.content + '] ' + \
@@ -150,5 +144,5 @@ def create_all_posts_from_ical(client, ical, event_category,event_map_location, 
     for component in ical.walk('VEVENT'):
         create_new_wp_post(client, component, event_category, event_map_location, location_gps, dry_run)
         i += 1
-    loginfo('Finished adding new posts count => ' +str(i))
+    loginfo('Finished adding new posts count => ' + str(i))
 

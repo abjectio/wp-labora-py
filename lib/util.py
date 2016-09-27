@@ -27,29 +27,36 @@ import sys
 import logging
 import ConfigParser
 
+
 def initiate_logging(file_name):
     """ Initate a logger with configs """
-    logging.basicConfig(format='[%(asctime)s-%(levelname)s] %(message)s',datefmt='%H:%M:%S',filename=file_name, level=logging.INFO, filemode="w")
+    logging.basicConfig(format='[%(asctime)s-%(levelname)s] %(message)s', datefmt='%H:%M:%S',
+                        filename=file_name, level=logging.INFO, filemode="w")
+
 
 def logerror(error_message):
     """Logging error message"""
     logging.error(error_message)
 
+
 def logdebug(debug_message):
     """Logging error message"""
     logging.debug(debug_message)
+
 
 def loginfo(info_message):
     """Logging info message"""
     logging.info(info_message)
 
+
 def shutdownLogger():
     """Proper shutdown of logger"""
     logging.shutdown()
 
+
 def populate_configs():
     """Populating all configs from a config file."""
-    #Get config file to read
+    # Get config file to read
     if len(sys.argv) <= 1:
         logerror('You need to pass a parameter with a config file !')
         logerror('[EXIT AND ENDS IMPORT]')
@@ -60,7 +67,7 @@ def populate_configs():
     try:
         loginfo('Config file : [' + config_filename + ']')
         parser.readfp(open(config_filename))
-    except IOError as exception:
+    except Exception as exception:
         logerror('Could not read file! - ' + str(exception))
         logerror('[EXIT AND ENDS IMPORT]')
         sys.exit(2)
