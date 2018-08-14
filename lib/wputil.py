@@ -87,7 +87,11 @@ def create_new_wp_post(client, component, event_category, event_map_location, lo
     start_event = component.get('DTSTART').dt.strftime('%Y-%m-%d %H:%M')
     end_event = component.get('DTEND').dt.strftime('%Y-%m-%d %H:%M')
     end_frequency_event = component.get('DTEND').dt.strftime('%Y-%m-%d')
-    event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
+    event_description = component.get('DESCRIPTION')
+    if event_description is None:
+        event_description = " "
+    else:
+        event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
 
     # Create a new post
     new_post = WordPressPost()
