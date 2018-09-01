@@ -63,7 +63,7 @@ def get_all_ids(client, event_category):
                 uid = -1  # None its empty form wordpress, otherwhise its an uid
                 #  Find UID if exist
                 for one_field in one_post.custom_fields:
-                    uid = one_field.get('imic_event_labora_uid')
+                    uid = one_field.get('imic_import_uid')
                     if uid is not None:
                         break
 
@@ -115,8 +115,12 @@ def create_new_empty_wp_post(component, event_category, event_map_location, loca
     start_event = component.get('DTSTART').dt.strftime('%Y-%m-%d %H:%M')
     end_event = component.get('DTEND').dt.strftime('%Y-%m-%d %H:%M')
     end_frequency_event = component.get('DTEND').dt.strftime('%Y-%m-%d')
-    event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
     uid = component.get('UID').encode('UTF-8', 'backslashreplace')
+    event_description = component.get('DESCRIPTION')
+    if event_description is None:
+        event_description = " "
+    else:
+        event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
 
     # Create a new post
     new_post = WordPressPost()
@@ -168,8 +172,12 @@ def create_or_update_wp_post(client, component, event_category, event_map_locati
     start_event = component.get('DTSTART').dt.strftime('%Y-%m-%d %H:%M')
     end_event = component.get('DTEND').dt.strftime('%Y-%m-%d %H:%M')
     end_frequency_event = component.get('DTEND').dt.strftime('%Y-%m-%d')
-    event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
     uid = component.get('UID').encode('UTF-8', 'backslashreplace')
+    event_description = component.get('DESCRIPTION')
+    if event_description is None:
+        event_description = " "
+    else:
+        event_description = component.get('DESCRIPTION').encode('UTF-8', 'backslashreplace')
 
     # Search for existing post
     tmp_post = search_wp_post_by_uid(client, 'event', uid)
