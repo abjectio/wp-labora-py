@@ -38,7 +38,7 @@ pip install pytz
 # https://www.python.org/dev/peps/pep-0257/
 from lib.ical import export_ics_file, read_ical_file
 from lib.wputil import get_wordpress_client, get_all_ids, \
-    delete_wp_posts, create_all_posts_from_ical
+    delete_wp_posts, create_or_update_posts_from_ical
 from lib.util import populate_configs, initiate_logging, loginfo, shutdownLogger
 
 
@@ -52,7 +52,7 @@ def main():
     # Populate the configs
     parser_config = populate_configs()
 
-    #Config header name
+    # Config header name
     section = "config"
     ics_url = parser_config.get(section, 'ics_url')
     wp_url = parser_config.get(section, 'wp_url')
@@ -77,17 +77,17 @@ def main():
         client = get_wordpress_client(wp_url, wp_user, wp_pwd)
 
         # Getting all IDs to delete
-        ids = get_all_ids(client, event_category)
+        #ids = get_all_ids(client, event_category)
 
         # Delete wordpress posts
-        delete_wp_posts(client, ids, dry_run)
+        # delete_wp_posts(client, ids, dry_run)
 
         # Get the new Calendar
         cal = read_ical_file(ics_filename)
 
         # Create new posts
         if cal is not None:
-            create_all_posts_from_ical(client, cal, event_category, event_map_location, location_gps, dry_run)
+            create_or_update_posts_from_ical(client, cal, event_category, event_map_location, location_gps, dry_run)
 
     #
     loginfo('[END IMPORT]')
