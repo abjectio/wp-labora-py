@@ -102,7 +102,7 @@ def search_wp_post_by_uid(client, post_type, uid):
         # Convert list of customs fields to a dict
         all_custom_fields_dict = { value['key']: value['value'] for value in all_custom_fields }
         uid_tmp = all_custom_fields_dict.get('imic_import_uid')
-        if uid_tmp == uid:
+        if uid_tmp.encode('utf-8') == uid:
             found_post = one_post
             return found_post
 
@@ -200,7 +200,11 @@ def create_or_update_wp_post(client, component, event_category, event_map_locati
             tmp_post.custom_fields.append({'key': i[0], 'value': i[1]})
 
     # Add New Post and it's meta data
-    log_string = 'Create ' if edit_post else 'Updated '
+    if edit_post:
+        log_string = 'Updated '
+    else:
+        log_string = 'Created '
+
     log_string += 'post - Title: [' + tmp_post.title.decode('utf-8') + ']'
     log_string += ' Start: [' + start_event + ']'
     log_string += ' End: [' + end_event + ']'
