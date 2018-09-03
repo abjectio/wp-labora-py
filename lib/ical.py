@@ -43,6 +43,7 @@ def export_ics_file(ics_url, output_file):
 
     try:
         export_ics = check_output(["curl", "--silent", ics_url])
+        export_ics = export_ics.decode('utf-8')
         if export_ics:
             ofile = open(output_file, 'w')
             ofile.write(export_ics)

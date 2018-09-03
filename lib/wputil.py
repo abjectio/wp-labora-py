@@ -201,9 +201,9 @@ def create_or_update_wp_post(client, component, event_category, event_map_locati
 
     # Add New Post and it's meta data
     log_string = 'Create ' if edit_post else 'Updated '
-    log_string += 'post - Title: [' + tmp_post.title + '] Description: [' + tmp_post.content
-    log_string += '] Start: [' + start_event
-    log_string += '] End: [' + end_event + ']'
+    log_string += 'post - Title: [' + tmp_post.title.decode('utf-8') + ']'
+    log_string += ' Start: [' + start_event + ']'
+    log_string += ' End: [' + end_event + ']'
 
     loginfo(log_string)
 

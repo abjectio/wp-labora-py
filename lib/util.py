@@ -25,7 +25,7 @@ along with import_events.  If not, see <http://www.gnu.org/licenses/>.
 """
 import sys
 import logging
-import ConfigParser
+import configparser
 
 
 def initiate_logging(file_name):
@@ -63,10 +63,12 @@ def populate_configs():
         sys.exit(2)
 
     config_filename = sys.argv[1]
-    parser = ConfigParser.ConfigParser()
+    parser = configparser.ConfigParser()
+    parser.sections()
+
     try:
         loginfo('Config file : [' + config_filename + ']')
-        parser.readfp(open(config_filename))
+        parser.read(config_filename)
     except Exception as exception:
         logerror('Could not read file! - ' + str(exception))
         logerror('[EXIT AND ENDS IMPORT]')
